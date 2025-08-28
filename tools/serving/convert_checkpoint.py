@@ -28,7 +28,7 @@ _MERGE_LORA = flags.DEFINE_bool(
     "merge_lora", False,
     "Whether to merge the LoRA weights into the base model (if it is a LoRA model).")
 _UPDATE_EOS_TOKEN = flags.DEFINE_bool(
-    "update_eos_token", False,
+    "update_eos_token", True,
     "Whether to update the eos token to the speech end token.")
 _ADD_NONVERBAL_TOKENS = flags.DEFINE_bool("add_missing_nonverbal_tokens", False,
                                           "Whether to add missing nonverbal tokens.")
