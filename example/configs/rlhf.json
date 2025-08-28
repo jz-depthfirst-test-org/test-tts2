@@ -36,13 +36,13 @@
         "only_load_model_weights": false
     },
     "train_weighted_datasets": {
-        "/inworld/tts/datasets/finch/high_quality_filter": 1.0
+        "/path/to/your/train/dataset": 1.0
     },
     "val_weighted_datasets": {
-        "/inworld/tts/datasets/finch/high_quality_filter": 1.0
+        "/path/to/your/val/dataset": 1.0
     },
     "rlhf_training": {
-        "base_model_dir": "/path/to/your/serving/model",
+        "base_model_dir": "/path/to/your/base/model",
         "top_p": 0.9,
         "top_k": 75,
         "repetition_penalty": 1.1,
