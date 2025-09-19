@@ -5,14 +5,6 @@ from typing import Any
 from tts.core import constants
 
 
-def _format_transcript(transcript: str) -> str:
-    """Formats a transcript with the appropriate tokens."""
-    return (
-        f"{constants.TEXT_PROMPT_START_TOKEN}{transcript}"
-        f"{constants.TEXT_PROMPT_END_TOKEN}"
-    )
-
-
 def _format_voice_description(voice_description: str) -> str:
     """Formats a voice description with the appropriate tokens."""
     return (
@@ -26,12 +18,7 @@ def _create_message_with_voice_description(
 ) -> str:
     """Creates a message with voice description."""
     formatted_voice_description = _format_voice_description(voice_description)
-    return (
-        "Given the following voice description "
-        + formatted_voice_description
-        + " convert the text to speech:"
-        + transcript
-    )
+    return f"{formatted_voice_description} {transcript}"
 
 
 def _format_speech_tokens(speech_ids: list[int]) -> str:
@@ -83,10 +70,10 @@ class TrainingPromptCompiler(PromptCompiler):
         self, audio_prompt_transcription: str, voice_description: str = ""
     ) -> str:
         """Compiles a user message for finetuning."""
-        transcript = _format_transcript(audio_prompt_transcription)
+        transcript = audio_prompt_transcription
         if voice_description:
             return _create_message_with_voice_description(voice_description, transcript)
-        return constants.DEFAULT_MODEL_INSTRUCTION + transcript
+        return transcript
 
     def _compile_assistant_message(self, speech_ids: Sequence[int]) -> str:
         """Compiles an assistant message for finetuning."""
@@ -97,7 +84,7 @@ class TrainingPromptCompiler(PromptCompiler):
 
     def _compile_prompt(self, user_message: str, assistant_message: str) -> Any:
         """Compiles prompt for the model."""
-        return user_message + "\n" + assistant_message
+        return user_message + assistant_message
 
 
 class InferencePromptCompiler(PromptCompiler):
@@ -134,12 +121,10 @@ class InferencePromptCompiler(PromptCompiler):
         else:
             transcript = text_to_synthesize
 
-        transcript = _format_transcript(transcript)
-
         if voice_description:
             return _create_message_with_voice_description(voice_description, transcript)
 
-        return constants.DEFAULT_MODEL_INSTRUCTION + transcript
+        return transcript
 
     def _compile_assistant_message(self, speech_ids: list[int]) -> str:
         """Compiles an assistant message for inference."""
@@ -151,4 +136,4 @@ class InferencePromptCompiler(PromptCompiler):
 
     def _compile_prompt(self, user_message: str, assistant_message: str) -> Any:
         """Compiles prompt for the model."""
-        return user_message + "\n" + assistant_message
+        return user_message + assistant_message
