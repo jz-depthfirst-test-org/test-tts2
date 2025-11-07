@@ -1,4 +1,6 @@
 name: Lint Code
+permissions:
+  contents: read
 
 on:
   push:
